@@ -1,32 +1,28 @@
 /**
- * @file pc_link.h
+ * @file pc_link.c
  * @author Mohamed Hassanin
  * @brief A software pattern used to transfer data from microcontrollers 
  * and some form of personal computer (PC, notebook or similar) using UART
  * communication protocol.
  * @version 0.1
- * @date 2021-03-15 
+ * @date 2021-03-16 
  */
-#ifndef PC_LINK_H
-#define PC_LINK_H
+
 /******************************************************************************
  * Includes
  ******************************************************************************/
-#include "pc_link_cfg.h"
+#include "pc_link.h"
 
 /******************************************************************************
- * Function prototypes
+ * Function Definitions
  ******************************************************************************/
-#ifdef __cplusplus
-extern "C"{
-#endif
+extern void 
+PcLink_Init(PcLinkConfig_t * const Config)
+{
+	for(int i = 0; i < PC_LINK_MAX; i++) 
+		{
+			Config[i].PcLinkSendAllow = PC_LINK_SEND_ALLOW_ON;
+		}
+}
 
-extern void PcLink_Init(PcLinkConfig_t * const Config);
-extern void PcLink_Update(void);
-
-#ifdef __cplusplus
-} // extern "C"
-#endif
-
-#endif /* PC_LINK_H */
 /*****************************End of File ************************************/

@@ -11,6 +11,10 @@
 #define PC_LINK_CFG_H
 
 /**********************************************************************
+* Includes
+**********************************************************************/
+#include "uart.h"
+/**********************************************************************
 * Typedefs
 **********************************************************************/
 
@@ -24,9 +28,21 @@ typedef enum
   PC_LINK_MAX
 }PcLink_t;
 
+/**
+* Defines the allowance of sending
+*/
+typedef enum
+{
+  PC_LINK_SEND_ALLOW_ON, /**< it's allowed to send */
+  PC_LINK_SEND_ALLOW_OFF, /**< it's not allowed to send */
+  PC_LINK_SEND_ALLOW_MAX 
+}PcLinkSendAllow_t;
+
 typedef struct
 {
-  PcLink_t PcLink; /**< the UART peripheral id */
+  PcLink_t PcLink; /**< the pc link id */
+  Uart_t Uart; /**< the UART peripheral id */
+  PcLinkSendAllow_t PcLinkSendAllow; /**< is it allowed to send */
 } PcLinkConfig_t;
 
 /******************************************************************************
