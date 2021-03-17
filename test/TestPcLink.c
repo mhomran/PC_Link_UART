@@ -15,7 +15,8 @@
 /// @endcond
 
 #include "pc_link.h" /**< module under the test */
-#include "pc_link_cfg.h" 
+#include "pc_link_cfg.h"
+#include "Mock_uart.h" 
 
 /**********************************************************************
 * Variable Definitions
@@ -24,7 +25,8 @@ static PcLinkConfig_t * gConfig;
 
 /**********************************************************************/
 
-void setUp(void)
+void 
+setUp(void)
 {
   const PcLinkConfig_t * config = PcLink_GetConfig();
   gConfig = (PcLinkConfig_t *)config;
@@ -45,6 +47,17 @@ test_SendingAllowedAfterInit(void)
 		{
 			TEST_ASSERT_EQUAL(gConfig[i].PcLinkSendAllow, PC_LINK_SEND_ALLOW_ON);
 		}
+}
+
+
+void 
+test_SendingNotAllowedAfterXoff(void) 
+{
+  //given
+  Uart_ReceiveUpdate_Expect();
+
+  //act
+  PcLink_Update();
 }
 
 
