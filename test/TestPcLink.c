@@ -19,6 +19,12 @@
 #include "Mock_uart.h" 
 
 /**********************************************************************
+* Functions Declarations
+**********************************************************************/
+static uint8_t Uart_PeekLastByteSetXOFF_Callback(const Uart_t Uart,
+ uint8_t* const Data, int);
+
+/**********************************************************************
 * Variable Definitions
 **********************************************************************/
 static PcLinkConfig_t * gConfig;
@@ -50,16 +56,36 @@ test_SendingAllowedAfterInit(void)
 }
 
 
+
 void 
 test_SendingNotAllowedAfterXoff(void) 
 {
   //given
   Uart_ReceiveUpdate_Expect();
+  for(int i = 0; i < PC_LINK_MAX; i++) 
+		{
+      Uart_PeekLastByte_StubWithCallback(Uart_PeekLastByteSetXOFF_Callback);
+      
+      Uart_ReceiveByte_IgnoreAndReturn(1);
+    }
 
   //act
   PcLink_Update();
+
+  //assert
+  for(int i = 0; i < PC_LINK_MAX; i++) 
+    {
+      TEST_ASSERT_EQUAL(gConfig[i].PcLinkSendAllow, PC_LINK_SEND_ALLOW_OFF);
+    }
 }
 
+
+static uint8_t 
+Uart_PeekLastByteSetXOFF_Callback(const Uart_t Uart, uint8_t* const Data, int a)
+{
+  *Data = PC_LINK_XOFF;
+  return 1;
+}
 
 /*****************************End of File ************************************/
 
