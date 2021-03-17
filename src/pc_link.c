@@ -53,12 +53,20 @@ PcLink_Update(void)
       
       if(Res == 1) 
         { 
-          gConfig[i].PcLinkSendAllow = PC_LINK_SEND_ALLOW_ON;
           if(Rcv == PC_LINK_XOFF)
             {
               gConfig[i].PcLinkSendAllow = PC_LINK_SEND_ALLOW_OFF;
               Uart_ReceiveByte(gConfig[i].Uart, &Rcv);
             }
+          else if (Rcv == PC_LINK_XON)
+            {
+              gConfig[i].PcLinkSendAllow = PC_LINK_SEND_ALLOW_ON;
+              Uart_ReceiveByte(gConfig[i].Uart, &Rcv);
+            }
+          else
+            {
+              //DO NOTHING
+            }  
         }
     }
 }

@@ -23,6 +23,8 @@
 **********************************************************************/
 static uint8_t Uart_PeekLastByteSetXOFF_Callback(const Uart_t Uart,
  uint8_t* const Data, int);
+static uint8_t Uart_PeekLastByteSetXON_Callback(const Uart_t Uart,
+ uint8_t* const Data, int);
 
 /**********************************************************************
 * Variable Definitions
@@ -79,11 +81,39 @@ test_SendingNotAllowedAfterXoff(void)
     }
 }
 
+void 
+test_SendingAllowedAfterXon(void) 
+{
+  //given
+  Uart_ReceiveUpdate_Expect();
+  for(int i = 0; i < PC_LINK_MAX; i++) 
+		{
+      Uart_PeekLastByte_StubWithCallback(Uart_PeekLastByteSetXON_Callback);
+      
+      Uart_ReceiveByte_IgnoreAndReturn(1);
+    }
+
+  //act
+  PcLink_Update();
+
+  //assert
+  for(int i = 0; i < PC_LINK_MAX; i++) 
+    {
+      TEST_ASSERT_EQUAL(gConfig[i].PcLinkSendAllow, PC_LINK_SEND_ALLOW_ON);
+    }
+}
 
 static uint8_t 
 Uart_PeekLastByteSetXOFF_Callback(const Uart_t Uart, uint8_t* const Data, int a)
 {
   *Data = PC_LINK_XOFF;
+  return 1;
+}
+
+static uint8_t 
+Uart_PeekLastByteSetXON_Callback(const Uart_t Uart, uint8_t* const Data, int a)
+{
+  *Data = PC_LINK_XON;
   return 1;
 }
 
