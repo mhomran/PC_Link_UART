@@ -45,10 +45,10 @@ PcLink_Update(void)
   uint8_t Rcv;
 
   //update the uart receive buffers
-  Uart_ReceiveUpdate();
 
   for(i = 0; i < PC_LINK_MAX; i++) 
 		{
+      Uart_ReceiveUpdate(gConfig[i].Uart);
       Res = Uart_PeekLastByte(gConfig[i].Uart, &Rcv);
       
       if(Res == 1) 
@@ -68,7 +68,13 @@ PcLink_Update(void)
               //DO NOTHING
             }  
         }
+
+      if(gConfig[i].PcLinkSendAllow == PC_LINK_SEND_ALLOW_ON)
+        {
+          Uart_SendUpdate(gConfig[i].Uart);
+        }
     }
+
 }
 
 /*****************************End of File ************************************/

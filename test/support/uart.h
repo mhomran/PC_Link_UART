@@ -53,8 +53,8 @@ extern "C"{
 
 void Uart_Init(const UartConfig_t * const Config);
 
-void Uart_SendUpdate(void);
-void Uart_ReceiveUpdate(void);
+void Uart_SendUpdate(const Uart_t Uart);
+void Uart_ReceiveUpdate(const Uart_t Uart);
 
 uint8_t Uart_SendByte(const Uart_t Uart, const uint8_t Data);
 uint8_t Uart_ReceiveByte(const Uart_t Uart, uint8_t* const Data);

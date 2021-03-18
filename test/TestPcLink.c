@@ -63,9 +63,10 @@ void
 test_SendingNotAllowedAfterXoff(void) 
 {
   //given
-  Uart_ReceiveUpdate_Expect();
   for(int i = 0; i < PC_LINK_MAX; i++) 
 		{
+      Uart_ReceiveUpdate_Expect(gConfig[i].Uart);
+      
       Uart_PeekLastByte_StubWithCallback(Uart_PeekLastByteSetXOFF_Callback);
       
       Uart_ReceiveByte_IgnoreAndReturn(1);
@@ -85,12 +86,15 @@ void
 test_SendingAllowedAfterXon(void) 
 {
   //given
-  Uart_ReceiveUpdate_Expect();
   for(int i = 0; i < PC_LINK_MAX; i++) 
 		{
+      Uart_ReceiveUpdate_Expect(gConfig[i].Uart);
+
       Uart_PeekLastByte_StubWithCallback(Uart_PeekLastByteSetXON_Callback);
       
       Uart_ReceiveByte_IgnoreAndReturn(1);
+
+      Uart_SendUpdate_Expect(gConfig[i].Uart);
     }
 
   //act
@@ -103,6 +107,44 @@ test_SendingAllowedAfterXon(void)
     }
 }
 
+void 
+test_SendUpdateIsCalledWheneverSendingIsAllowed(void)
+{
+  //given
+  for(int i = 0; i < PC_LINK_MAX; i++) 
+		{
+      Uart_ReceiveUpdate_Expect(gConfig[i].Uart);
+
+      Uart_PeekLastByte_StubWithCallback(Uart_PeekLastByteSetXON_Callback);
+      
+      Uart_ReceiveByte_IgnoreAndReturn(1);
+
+      Uart_SendUpdate_Expect(gConfig[i].Uart);
+    }
+
+  //act
+  PcLink_Update();
+}
+
+void 
+test_SendUpdateIsNotCalledWheneverSendingIsNotAllowed(void)
+{
+  //given
+  for(int i = 0; i < PC_LINK_MAX; i++) 
+		{
+      Uart_ReceiveUpdate_Expect(gConfig[i].Uart);
+
+      Uart_PeekLastByte_StubWithCallback(Uart_PeekLastByteSetXOFF_Callback);
+      
+      Uart_ReceiveByte_IgnoreAndReturn(1);
+    }
+
+  //act
+  PcLink_Update();
+}
+/*****************************************************************************
+* Helper functions
+******************************************************************************/
 static uint8_t 
 Uart_PeekLastByteSetXOFF_Callback(const Uart_t Uart, uint8_t* const Data, int a)
 {
