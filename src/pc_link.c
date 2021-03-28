@@ -16,12 +16,14 @@
 /******************************************************************************
  * Module variable definitions
  ******************************************************************************/
-static PcLinkConfig_t * gConfig;
+PcLinkSendAllow_t PcLinkSendAllow[PC_LINK_MAX]; /**< is it allowed to send */
+
+const PcLinkConfig_t* gConfig; /** a pointer to the configuration table */
 /******************************************************************************
  * Function Definitions
  ******************************************************************************/
 extern void 
-PcLink_Init(PcLinkConfig_t * const Config)
+PcLink_Init(const PcLinkConfig_t* const Config)
 {
   if(!(Config != 0x00))
     {
@@ -31,7 +33,7 @@ PcLink_Init(PcLinkConfig_t * const Config)
 
 	for(int i = 0; i < PC_LINK_MAX; i++) 
 		{
-			Config[i].PcLinkSendAllow = PC_LINK_SEND_ALLOW_ON;
+			PcLinkSendAllow[i] = PC_LINK_SEND_ALLOW_ON;
 		}
 
   gConfig = Config;  
@@ -55,12 +57,12 @@ PcLink_Update(void)
         { 
           if(Rcv == PC_LINK_XOFF)
             {
-              gConfig[i].PcLinkSendAllow = PC_LINK_SEND_ALLOW_OFF;
+              PcLinkSendAllow[i] = PC_LINK_SEND_ALLOW_OFF;
               Uart_ReceiveByte(gConfig[i].Uart, &Rcv);
             }
           else if (Rcv == PC_LINK_XON)
             {
-              gConfig[i].PcLinkSendAllow = PC_LINK_SEND_ALLOW_ON;
+              PcLinkSendAllow[i] = PC_LINK_SEND_ALLOW_ON;
               Uart_ReceiveByte(gConfig[i].Uart, &Rcv);
             }
           else
@@ -69,7 +71,7 @@ PcLink_Update(void)
             }  
         }
 
-      if(gConfig[i].PcLinkSendAllow == PC_LINK_SEND_ALLOW_ON)
+      if(PcLinkSendAllow[i] == PC_LINK_SEND_ALLOW_ON)
         {
           Uart_SendUpdate(gConfig[i].Uart);
         }

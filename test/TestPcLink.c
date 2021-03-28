@@ -49,65 +49,6 @@ void tearDown(void)
 * Test cases
 ******************************************************************************/
 void 
-test_SendingAllowedAfterInit(void) 
-{
-	for(int i = 0; i < PC_LINK_MAX; i++) 
-		{
-			TEST_ASSERT_EQUAL(gConfig[i].PcLinkSendAllow, PC_LINK_SEND_ALLOW_ON);
-		}
-}
-
-
-
-void 
-test_SendingNotAllowedAfterXoff(void) 
-{
-  //given
-  for(int i = 0; i < PC_LINK_MAX; i++) 
-		{
-      Uart_ReceiveUpdate_Expect(gConfig[i].Uart);
-      
-      Uart_PeekLastByte_StubWithCallback(Uart_PeekLastByteSetXOFF_Callback);
-      
-      Uart_ReceiveByte_IgnoreAndReturn(1);
-    }
-
-  //act
-  PcLink_Update();
-
-  //assert
-  for(int i = 0; i < PC_LINK_MAX; i++) 
-    {
-      TEST_ASSERT_EQUAL(gConfig[i].PcLinkSendAllow, PC_LINK_SEND_ALLOW_OFF);
-    }
-}
-
-void 
-test_SendingAllowedAfterXon(void) 
-{
-  //given
-  for(int i = 0; i < PC_LINK_MAX; i++) 
-		{
-      Uart_ReceiveUpdate_Expect(gConfig[i].Uart);
-
-      Uart_PeekLastByte_StubWithCallback(Uart_PeekLastByteSetXON_Callback);
-      
-      Uart_ReceiveByte_IgnoreAndReturn(1);
-
-      Uart_SendUpdate_Expect(gConfig[i].Uart);
-    }
-
-  //act
-  PcLink_Update();
-
-  //assert
-  for(int i = 0; i < PC_LINK_MAX; i++) 
-    {
-      TEST_ASSERT_EQUAL(gConfig[i].PcLinkSendAllow, PC_LINK_SEND_ALLOW_ON);
-    }
-}
-
-void 
 test_SendUpdateIsCalledWheneverSendingIsAllowed(void)
 {
   //given

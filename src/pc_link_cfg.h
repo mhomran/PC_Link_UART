@@ -42,7 +42,6 @@ typedef struct
 {
   PcLink_t PcLink; /**< the pc link id */
   Uart_t Uart; /**< the UART peripheral id */
-  PcLinkSendAllow_t PcLinkSendAllow; /**< is it allowed to send */
 } PcLinkConfig_t;
 
 /******************************************************************************
@@ -52,7 +51,7 @@ typedef struct
 extern "C"{
 #endif
 
-extern const PcLinkConfig_t* PcLink_GetConfig(void);
+extern const PcLinkConfig_t* const PcLink_GetConfig(void);
 
 #ifdef __cplusplus
 } // extern "C"

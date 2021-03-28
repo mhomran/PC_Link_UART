@@ -25,7 +25,7 @@
 extern "C"{
 #endif
 
-extern void PcLink_Init(PcLinkConfig_t * const Config);
+extern void PcLink_Init(const PcLinkConfig_t* const Config);
 extern void PcLink_Update(void);
 
 #ifdef __cplusplus

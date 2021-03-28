@@ -13,7 +13,7 @@
 /**********************************************************************
 * Module Variable Definitions
 **********************************************************************/
-static PcLinkConfig_t PcLinkConfig[PC_LINK_MAX] = {
+static const PcLinkConfig_t PcLinkConfig[PC_LINK_MAX] = {
   { .PcLink = PC_LINK_0, .Uart = UART_0 },
 };
 /**********************************************************************
@@ -23,7 +23,7 @@ static PcLinkConfig_t PcLinkConfig[PC_LINK_MAX] = {
  * @brief return the configuration structure holding the configuration table 
  * of the module
  */
-extern const PcLinkConfig_t* 
+extern const PcLinkConfig_t* const
 PcLink_GetConfig(void)
 {
   return PcLinkConfig;
