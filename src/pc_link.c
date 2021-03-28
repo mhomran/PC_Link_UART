@@ -22,6 +22,14 @@ const PcLinkConfig_t* gConfig; /** a pointer to the configuration table */
 /******************************************************************************
  * Function Definitions
  ******************************************************************************/
+/******************************************************************************
+* Function : PcLink_Init()
+*//**
+* \b Description: Initialization function for the PC link module<br/>
+* \b PRE-CONDITION: Configuration table is populated<br/>
+* @param Config a pointer to the configuration table of the links.
+* @return void 
+******************************************************************************/
 extern void 
 PcLink_Init(const PcLinkConfig_t* const Config)
 {
@@ -39,6 +47,16 @@ PcLink_Init(const PcLinkConfig_t* const Config)
   gConfig = Config;  
 }
 
+/******************************************************************************
+* Function : PcLink_Update()
+*//**
+* \b Description: Update function to control the PC links sending and
+* receiving<br/>
+* \b PRE-CONDITION: PcLink_Init is called correctly<br/>
+* \b POST-CONDITION: The uart peripherals would send or receive correctly
+* depending on the received data.<br/>
+* @return void 
+******************************************************************************/
 extern void 
 PcLink_Update(void)
 {
